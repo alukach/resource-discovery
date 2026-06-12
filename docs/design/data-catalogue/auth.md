@@ -29,11 +29,11 @@ A few endpoints are public and bypass authentication entirely: the landing page 
 
 Access is governed by an opinionated naming convention for collection IDs. A collection's ID prefix — the part before the first `.` — determines who can read and write it.
 
-| Collection ID pattern | Example | Read | Write |
-| --- | --- | --- | --- |
-| No prefix (no `.` in the ID) | `sentinel-2-l2a` | Everyone, including anonymous users | `stac_editor` role only |
-| `<username>.<collection>` | `alice.my-experiments` | User `alice` | User `alice` |
-| `<group>.<collection>` | `pn56su-dss-0034.landsat` | Members of group `pn56su-dss-0034` or `pn56su-dss-0034-ro` | Members of group `pn56su-dss-0034` |
+| Collection ID pattern        | Example                   | Read                                                       | Write                              |
+| ---------------------------- | ------------------------- | ---------------------------------------------------------- | ---------------------------------- |
+| No prefix (no `.` in the ID) | `sentinel-2-l2a`          | Everyone, including anonymous users                        | `stac_editor` role only            |
+| `<username>.<collection>`    | `alice.my-experiments`    | User `alice`                                               | User `alice`                       |
+| `<group>.<collection>`       | `pn56su-dss-0034.landsat` | Members of group `pn56su-dss-0034` or `pn56su-dss-0034-ro` | Members of group `pn56su-dss-0034` |
 
 ### Public collections
 
@@ -54,7 +54,7 @@ Group permissions derive from the `groups` claim of the user's token. The policy
 Groups that lack the `/dss/` prefix or the `-dss-` infix are ignored.
 
 !!! warning "Collection and item permissions are coupled"
-    Write access to a collection's items implies write access to the collection itself. A user who can add items to `pn56su-dss-0034.landsat` can also edit or delete that collection's metadata — and can create new collections under any prefix they hold. This matches the design agreed in [issue #203](https://github.com/EOEPCA/resource-discovery/issues/203).
+    Write access to a collection's items implies write access to the collection itself. A user who can add items to `pn56su-dss-0034.landsat` can also edit or delete that collection's metadata — and can create new collections under any prefix they hold.
 
 ### Service accounts: the `stac_editor` role
 
@@ -92,7 +92,7 @@ uv run --with pytest --with pytest-asyncio --with cql2 \
 
 Because read responses depend on the caller's identity, clients should send their OIDC token on **every** request to the STAC API — not only on writes. An unauthenticated `GET /collections` returns only public collections; the same request with a `Authorization: Bearer <token>` header additionally returns the caller's user and group collections.
 
-[STAC Manager](https://github.com/developmentseed/stac-manager) (the basis of the [Resource Administration UI](../resource-admin-ui/design.md)) follows this pattern as of `v1.0.0`: when a user is logged in, it attaches their token to all STAC API requests — collection listings, item searches, and transactions alike — so users see their private collections throughout the UI (see [stac-manager#71](https://github.com/developmentseed/stac-manager/pull/71)).
+[STAC Manager](https://github.com/developmentseed/stac-manager) (the basis of the [Resource Administration UI](../resource-admin-ui/design.md)) follows this pattern as of `v1.0.0`: when a user is logged in, it attaches their token to all STAC API requests — collection listings, item searches, and transactions alike — so users see their private collections throughout the UI.
 
 Command-line and notebook users can do the same, e.g. with `pystac-client`:
 
