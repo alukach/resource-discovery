@@ -74,7 +74,7 @@ A request that matches no policy is denied: an anonymous write, or an authentica
 
 ## Implementation
 
-The policy is implemented as custom [filter classes](https://github.com/developmentseed/stac-auth-proxy#filters) for STAC Auth Proxy, defined in [`eoepca_filters.py`](https://github.com/EOEPCA/eoepca-plus/blob/deploy-develop/argocd/eoepca/data-access/parts/stac-auth-proxy/eoepca_filters.py) in the `eoepca-plus` deployment repository and wired into the proxy via its `COLLECTIONS_FILTER_CLS` and `ITEMS_FILTER_CLS` settings in the [Helm values](https://github.com/EOEPCA/eoepca-plus/blob/deploy-develop/argocd/eoepca/data-access/parts/values/values-eoapi.yaml). The two filter classes share one policy implementation; they differ only in the property they filter on (`id` for collections, `collection` for items).
+The policy is implemented as custom [filter factories](https://developmentseed.org/stac-auth-proxy/user-guide/record-level-auth/#filter-contract) for STAC Auth Proxy, defined in [`eoepca_filters.py`](https://github.com/EOEPCA/eoepca-plus/blob/deploy-develop/argocd/eoepca/data-access/parts/stac-auth-proxy/eoepca_filters.py) in the `eoepca-plus` deployment repository and wired into the proxy via its `COLLECTIONS_FILTER_CLS` and `ITEMS_FILTER_CLS` settings in the [Helm values](https://github.com/EOEPCA/eoepca-plus/blob/deploy-develop/argocd/eoepca/data-access/parts/values/values-eoapi.yaml). The two filter factories share one policy implementation; they differ only in the property they filter on (`id` for collections, `collection` for items).
 
 A Kustomize `configMapGenerator` packages the policy file into a ConfigMap, which is mounted into the proxy container at runtime. Policy logic can therefore be changed by editing a single Python file in the deployment repository — no proxy image rebuild or chart upgrade is required. ArgoCD applies the updated ConfigMap, and the proxy pods load the new policy on their next restart.
 
@@ -86,7 +86,7 @@ uv run --with pytest --with pytest-asyncio --with cql2 \
 ```
 
 !!! note "Version requirement"
-    The custom filter classes require STAC Auth Proxy `v1.0.0` or later.
+    The custom filter factories require STAC Auth Proxy `v1.0.0` or later.
 
 ## Client behavior
 
