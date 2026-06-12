@@ -23,7 +23,7 @@ The proxy enforces policy through two mechanisms:
 
 Because the filter is generated as CQL2-JSON (a structured expression, not concatenated text), values taken from the token can never alter the shape of the query — there is no injection path from token claims into the filter.
 
-A few endpoints are public and bypass authentication entirely: the landing page (`/`), the API description (`/api`, `/api.html`), `/conformance`, and the health check (`/healthz`).
+A few endpoints are public and bypass authentication entirely: the landing page (`/`), the API description (`/api`, `/api.html`), `/conformance`, the OAuth2 redirect helper (`/docs/oauth2-redirect`), and the health endpoints (`/healthz`, `/_mgmt/ping`).
 
 ## Policy model
 
@@ -86,7 +86,7 @@ uv run --with pytest --with pytest-asyncio --with cql2 \
 ```
 
 !!! note "Version requirement"
-    The custom filter factories require STAC Auth Proxy `v1.0.0` or later.
+    The custom filter factories require STAC Auth Proxy `v1.0.0` or later (the EOEPCA+ demo cluster deploys `v1.1.0`).
 
 ## Client behavior
 
