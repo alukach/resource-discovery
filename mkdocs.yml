@@ -20,6 +20,7 @@ nav:
             - design/resource-and-data-catalogue/api/usage.md
         - Data Catalogue (eoAPI):
           - Design: design/data-catalogue/design.md
+          - Access Control: design/data-catalogue/auth.md
           - Management:
             - design/data-catalogue/management/load-testing.md
           - API:
